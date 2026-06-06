@@ -70,41 +70,6 @@ function updateDashboard(){
 document.addEventListener('input',updateDashboard);
 document.addEventListener('DOMContentLoaded',()=>setTimeout(updateDashboard,100));
 </script>
-
-<script>
-function calcSection(ids){
- let total=ids.length, filled=0;
- ids.forEach(id=>{
-   const el=document.getElementById(id);
-   if(el && String(el.value||'').trim()!=='') filled++;
- });
- return total ? Math.round((filled/total)*100) : 0;
-}
-
-function updateDashboard(){
- const bioIds=[...document.querySelectorAll('#p2 input,#p2 textarea,#p2 select')].map(el=>el.id);
- const keluargaIds=[]; for(let i=21;i<=40;i++) keluargaIds.push('q'+i);
- const pendidikanIds=[]; for(let i=41;i<=55;i++) pendidikanIds.push('q'+i);
- const organisasiIds=[]; for(let i=56;i<=80;i++) organisasiIds.push('q'+i);
-
- const bio=document.getElementById('stat-bio');
- if(!bio) return;
-
- bio.textContent=calcSection(bioIds)+'%';
- document.getElementById('stat-kel').textContent=calcSection(keluargaIds)+'%';
- document.getElementById('stat-pend').textContent=calcSection(pendidikanIds)+'%';
- document.getElementById('stat-org').textContent=calcSection(organisasiIds)+'%';
-}
-
-document.addEventListener('DOMContentLoaded',function(){
- updateDashboard();
- document.querySelectorAll('input,textarea,select').forEach(el=>{
-   el.addEventListener('input',updateDashboard);
-   el.addEventListener('change',updateDashboard);
- });
-});
-</script>
-
 </body>
 </html>`);
  w.document.close();
@@ -395,82 +360,12 @@ function exportPDF(){
  }
 
  const w=window.open('','_blank');
- w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Laporan</title></head><body style="font-family:Arial;padding:30px;line-height:1.6">${report}
-<script>
-function calcSection(ids){
- let total=ids.length, filled=0;
- ids.forEach(id=>{
-   const el=document.getElementById(id);
-   if(el && String(el.value||'').trim()!=='') filled++;
- });
- return total ? Math.round((filled/total)*100) : 0;
-}
-
-function updateDashboard(){
- const bioIds=[...document.querySelectorAll('#p2 input,#p2 textarea,#p2 select')].map(el=>el.id);
- const keluargaIds=[]; for(let i=21;i<=40;i++) keluargaIds.push('q'+i);
- const pendidikanIds=[]; for(let i=41;i<=55;i++) pendidikanIds.push('q'+i);
- const organisasiIds=[]; for(let i=56;i<=80;i++) organisasiIds.push('q'+i);
-
- const bio=document.getElementById('stat-bio');
- if(!bio) return;
-
- bio.textContent=calcSection(bioIds)+'%';
- document.getElementById('stat-kel').textContent=calcSection(keluargaIds)+'%';
- document.getElementById('stat-pend').textContent=calcSection(pendidikanIds)+'%';
- document.getElementById('stat-org').textContent=calcSection(organisasiIds)+'%';
-}
-
-document.addEventListener('DOMContentLoaded',function(){
- updateDashboard();
- document.querySelectorAll('input,textarea,select').forEach(el=>{
-   el.addEventListener('input',updateDashboard);
-   el.addEventListener('change',updateDashboard);
- });
-});
-</script>
-
-</body></html>`);
+ w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Laporan</title></head><body style="font-family:Arial;padding:30px;line-height:1.6">${report}</body></html>`);
  w.document.close();
  setTimeout(()=>{w.focus();w.print();},700);
 }
 
 </script>
-
-<script>
-function calcSection(ids){
- let total=ids.length, filled=0;
- ids.forEach(id=>{
-   const el=document.getElementById(id);
-   if(el && String(el.value||'').trim()!=='') filled++;
- });
- return total ? Math.round((filled/total)*100) : 0;
-}
-
-function updateDashboard(){
- const bioIds=[...document.querySelectorAll('#p2 input,#p2 textarea,#p2 select')].map(el=>el.id);
- const keluargaIds=[]; for(let i=21;i<=40;i++) keluargaIds.push('q'+i);
- const pendidikanIds=[]; for(let i=41;i<=55;i++) pendidikanIds.push('q'+i);
- const organisasiIds=[]; for(let i=56;i<=80;i++) organisasiIds.push('q'+i);
-
- const bio=document.getElementById('stat-bio');
- if(!bio) return;
-
- bio.textContent=calcSection(bioIds)+'%';
- document.getElementById('stat-kel').textContent=calcSection(keluargaIds)+'%';
- document.getElementById('stat-pend').textContent=calcSection(pendidikanIds)+'%';
- document.getElementById('stat-org').textContent=calcSection(organisasiIds)+'%';
-}
-
-document.addEventListener('DOMContentLoaded',function(){
- updateDashboard();
- document.querySelectorAll('input,textarea,select').forEach(el=>{
-   el.addEventListener('input',updateDashboard);
-   el.addEventListener('change',updateDashboard);
- });
-});
-</script>
-
 </body>
 
 </html>
