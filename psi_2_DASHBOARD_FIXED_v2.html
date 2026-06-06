@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>SIMULASI PERSIAPAN WAWANCARA - Persona Research & Consulting</title>
+    <script src="https://cdn.tailwindcss.com">
+function escapeHtml(str){
+ return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+function nl2br(str){return escapeHtml(str).replace(/\n/g,'<br>');}
+
+function exportPDF(){
+ let report='<h1 style="text-align:center">LAPORAN HASIL SIMULASI</h1>';
+
+ report+='<h2>=== DATA DIRI ===</h2><table style="width:100%;border-collapse:collapse">';
+ document.querySelectorAll('#p2 input,#p2 textarea,#p2 select').forEach(f=>{
+   report+=`<tr><td style="border:1px solid #ddd;padding:6px;width:240px"><b>${escapeHtml(f.placeholder||f.id)}</b></td><td style="border:1px solid #ddd;padding:6px">${nl2br(f.value||'')}</td></tr>`;
+ });
+ report+='</table>';
+
+ report+='<div style="page-break-before:always"></div><h2>=== BANK PERTANYAAN ===</h2>';
+ for(let i=1;i<=100;i++){
+   const el=document.getElementById('q'+i);
+   if(!el) continue;
+   const lbl=el.previousElementSibling ? el.previousElementSibling.innerText : ('Pertanyaan '+i);
+   report+=`<div style="margin-bottom:15px"><div style="font-weight:bold">${escapeHtml(lbl)}</div><div style="border:1px solid #ccc;padding:10px">${nl2br(el.value)}</div></div>`;
+ }
+
+ report+='<div style="page-break-before:always"></div><h2>=== WORKBOOK REFLEKSI ===</h2>';
+ for(let i=1;i<=17;i++){
+   const el=document.getElementById('wb'+i);
+   if(!el) continue;
+   const lbl=el.previousElementSibling ? el.previousElementSibling.innerText : ('Workbook '+i);
+   report+=`<div style="margin-bottom:15px"><div style="font-weight:bold">${escapeHtml(lbl)}</div><div style="border:1px solid #ccc;padding:10px">${nl2br(el.value)}</div></div>`;
+ }
+
+ const w=window.open('','_blank');
+ w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Laporan</title></head><body style="font-family:Arial;padding:30px;line-height:1.6">${report}
+<script>
+function calcSection(ids){
+ let total=ids.length, filled=0;
+ ids.forEach(id=>{
+   const el=document.getElementById(id);
+   if(el && String(el.value||'').trim()!=='') filled++;
+ });
+ return Math.round((filled/total)*100);
+}
+
+function updateDashboard(){
+ const bioIds=[...document.querySelectorAll('#p2 input,#p2 textarea,#p2 select')].map(el=>el.id);
+
+ const keluargaIds=[];
+ for(let i=21;i<=40;i++) keluargaIds.push('q'+i);
+
+ const pendidikanIds=[];
+ for(let i=41;i<=55;i++) pendidikanIds.push('q'+i);
+
+ const organisasiIds=[];
+ for(let i=56;i<=80;i++) organisasiIds.push('q'+i);
+
+ const sb=document.getElementById('stat-bio');
+ if(!sb) return;
+
+ sb.textContent=calcSection(bioIds)+'%';
+ document.getElementById('stat-kel').textContent=calcSection(keluargaIds)+'%';
+ document.getElementById('stat-pend').textContent=calcSection(pendidikanIds)+'%';
+ document.getElementById('stat-org').textContent=calcSection(organisasiIds)+'%';
+}
+
+document.addEventListener('input',updateDashboard);
+document.addEventListener('DOMContentLoaded',()=>setTimeout(updateDashboard,100));
+</script>
+
+<script>
+function calcSection(ids){
+ let total=ids.length, filled=0;
+ ids.forEach(id=>{
+   const el=document.getElementById(id);
+   if(el && String(el.value||'').trim()!=='') filled++;
+ });
+ return total ? Math.round((filled/total)*100) : 0;
+}
+
+function updateDashboard(){
+ const bioIds=[...document.querySelectorAll('#p2 input,#p2 textarea,#p2 select')].map(el=>el.id);
+ const keluargaIds=[]; for(let i=21;i<=40;i++) keluargaIds.push('q'+i);
+ const pendidikanIds=[]; for(let i=41;i<=55;i++) pendidikanIds.push('q'+i);
+ const organisasiIds=[]; for(let i=56;i<=80;i++) organisasiIds.push('q'+i);
+
+ const bio=document.getElementById('stat-bio');
+ if(!bio) return;
+
+ bio.textContent=calcSection(bioIds)+'%';
+ document.getElementById('stat-kel').textContent=calcSection(keluargaIds)+'%';
+ document.getElementById('stat-pend').textContent=calcSection(pendidikanIds)+'%';
+ document.getElementById('stat-org').textContent=calcSection(organisasiIds)+'%';
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+ updateDashboard();
+ document.querySelectorAll('input,textarea,select').forEach(el=>{
+   el.addEventListener('input',updateDashboard);
+   el.addEventListener('change',updateDashboard);
+ });
+});
+</script>
+
+</body>
+</html>`);
+ w.document.close();
+ setTimeout(()=>{w.focus();w.print();},700);
+}
+
+</script>
+    <style>
+        .page { display: none; }
+        .page.active { display: block; }
+        .premium-card { background: #ffffff; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); padding: 2rem; }
+        .btn-main { background: #0f172a; color: white; padding: 12px 24px; border-radius: 8px; font-weight: bold; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <header class="bg-slate-900 text-white p-6 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="font-bold text-amber-500 uppercase tracking-widest">Persona Research & Consulting</h1>
+                <p class="text-[10px] text-slate-400">SIMULASI PERSIAPAN WAWANCARA & REFLEKSI DIRI</p>
+            </div>
+            <div id="status-bar" class="text-xs">Progress: 0%</div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto p-6">
+        <form id="psiForm">
+            <!-- HALAMAN 0: LANDING PAGE -->
+            <div id="p0" class="page active premium-card text-center">
+                <h2 class="text-3xl font-bold mb-4 text-slate-900">SIMULASI PERSIAPAN WAWANCARA & REFLEKSI DIRI</h2>
+                <p class="mb-6">Dikembangkan oleh Persona Research & Consulting untuk memandu Anda menyusun data diri secara sistematis.</p>
+                <div class="grid grid-cols-3 gap-4 mb-8">
+                    <div class="p-4 bg-slate-100 rounded-lg">100 Pertanyaan</div>
+                    <div class="p-4 bg-slate-100 rounded-lg">9 Modul</div>
+                    <div class="p-4 bg-slate-100 rounded-lg">Hasil PDF Eksklusif</div>
+                </div>
+                <button type="button" onclick="navigate(1)" class="btn-main">MULAI SIMULASI</button>
+            </div>
+
+            <!-- HALAMAN 1: MATERI PERSIAPAN (Modul) -->
+            <div id="p1" class="page premium-card">
+                <h2 class="text-2xl font-bold mb-6">Materi Persiapan</h2>
+                <div class="prose max-w-none text-sm leading-relaxed">
+                    <h3>BAB 1: Memahami Wawancara</h3>
+                    <p>Wawancara seleksi abdi negara bertujuan untuk mengevaluasi integritas dan kematangan psikologis kandidat secara mendalam...</p>
+                    <!-- Masukkan teks modul lengkap Anda di sini -->
+                </div>
+            </div>
+<!-- P2: DATA DIRI (Struktur Card Profesional) -->
+            <div id="p2" class="page premium-card">
+                <h2 class="text-2xl font-bold mb-6">Data Diri</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="text" id="nama" placeholder="Nama Lengkap" class="border p-2 rounded">
+                    <input type="text" id="panggil" placeholder="Nama Panggilan" class="border p-2 rounded">
+                    <input type="text" id="tempat" placeholder="Tempat Lahir" class="border p-2 rounded">
+                    <input type="date" id="tgl" class="border p-2 rounded">
+                    <input type="text" id="usia" placeholder="Usia" class="border p-2 rounded">
+                    <input type="text" id="jk" placeholder="Jenis Kelamin" class="border p-2 rounded">
+                    <input type="text" id="agama" placeholder="Agama" class="border p-2 rounded">
+                    <input type="text" id="nikah" placeholder="Status Pernikahan" class="border p-2 rounded">
+                    <input type="text" id="alamat" placeholder="Alamat Lengkap" class="border p-2 rounded">
+                    <input type="text" id="hp" placeholder="Nomor HP" class="border p-2 rounded">
+                    <input type="text" id="email" placeholder="Email" class="border p-2 rounded">
+                    <input type="text" id="tb" placeholder="Tinggi Badan" class="border p-2 rounded">
+                    <input type="text" id="bb" placeholder="Berat Badan" class="border p-2 rounded">
+                    <input type="text" id="pend" placeholder="Pendidikan Terakhir" class="border p-2 rounded">
+                    <input type="text" id="jur" placeholder="Jurusan" class="border p-2 rounded">
+                    <input type="text" id="hobi" placeholder="Hobi" class="border p-2 rounded">
+                    <input type="text" id="minat" placeholder="Minat" class="border p-2 rounded">
+                    <input type="text" id="prestasi" placeholder="Prestasi Akademik" class="border p-2 rounded">
+                    <input type="text" id="prestasinon" placeholder="Prestasi Non-Akad" class="border p-2 rounded">
+                    <input type="text" id="aktivitas" placeholder="Aktivitas Saat Ini" class="border p-2 rounded">
+                    <input type="text" id="field21" placeholder="Field 21" class="border p-2 rounded">
+                    <input type="text" id="field22" placeholder="Field 22" class="border p-2 rounded">
+                    <input type="text" id="field23" placeholder="Field 23" class="border p-2 rounded">
+                    <input type="text" id="field24" placeholder="Field 24" class="border p-2 rounded">
+                    <input type="text" id="field25" placeholder="Field 25" class="border p-2 rounded">
+                </div>
+            </div>
+
+            <!-- P6: BANK PERTANYAAN (100 MANUAL) -->
+            <div id="p6" class="page premium-card">
+                <h2 class="text-2xl font-bold mb-6">Bank Pertanyaan Reflektif</h2>
+                <div class="h-[500px] overflow-y-auto space-y-4 pr-4">
+                    <label class="font-bold text-sm">1. Siapa diri Anda sebenarnya?</label><textarea id="q1" class="w-full border p-2 rounded"></textarea>
+                    <label class="font-bold text-sm">2. Apa kelebihan terbesar Anda?</label><textarea id="q2" class="w-full border p-2 rounded"></textarea>
+                    <label class="font-bold text-sm">3. Apa tiga kelemahan utama Anda?</label><textarea id="q3" class="w-full border p-2 rounded"></textarea>
+                    <label class="font-bold text-sm">4. Bagaimana Anda menggambarkan karakter diri sendiri?</label><textarea id="q4" class="w-full border p-2 rounded"></textarea>
+                    <label class="font-bold text-sm">5. Apa prinsip hidup yang paling Anda pegang teguh?</label><textarea id="q5" class="w-full border p-2 rounded"></textarea>
+                    <label class="font-bold text-sm">6. Apa hal yang paling membuat Anda merasa bangga?</label><textarea id="q6" class="w-full border p-2 rounded"></textarea>
+                    <label class="font-bold text-sm">7. Apa ketakutan terbesar dalam hidup Anda?</label><textarea id="q7" class="w-full border p-2 rounded"></textarea>
+                    <label class="font-bold text-sm">8. Bagaimana cara Anda menjaga kesehatan mental?</label><textarea id="q8" class="w-full border p-2 rounded"></textarea>
+                    <label class="font-bold text-sm">9. Apakah Anda tipe orang yang terbuka atau tertutup?</label><textarea id="q9" class="w-full border p-2 rounded"></textarea>
+                    <label class="font-bold text-sm">10. Bagaimana cara Anda mengendalikan emosi saat marah?</label><textarea id="q10" class="w-full border p-2 rounded"></textarea>
+                    <label class="font-bold text-sm">11. Apa hobi yang paling berpengaruh pada karakter Anda?</label><textarea id="q11" class="w-full border p-2 rounded"></textarea>
+                    <label class="font-bold text-sm">12. Bagaimana cara Anda belajar dari kesalahan?</label><textarea id="q12" class="w-full border p-2 rounded"></textarea>
+                    <label class="font-bold text-sm">13. Apa hal yang paling ingin Anda ubah dari diri Anda?</label><textarea id="q13" class="w-full border p-2 rounded"></textarea>
+                    <label class="font-bold text-sm">14. Bagaimana Anda menghadapi kegagalan?</label><textarea id="q14" class="w-full border p-2 rounded"></textarea>
+                    <label class="font-bold text-sm">15. Apakah Anda merasa sudah cukup disiplin?</label><textarea id="q15" class="w-full border p-2 rounded"></textarea>
+                    <label class="font-bold text-sm">16. Apa arti kejujuran bagi Anda?</label><textarea id="q16" class="w-full border p-2 rounded"></textarea>
+                    <label class="font-bold text-sm">17. Bagaimana cara Anda mengelola stres?</label><textarea id="q17" class="w-full border p-2 rounded"></textarea>
+                    <label class="font-bold text-sm">18. Apa kebiasaan buruk yang sedang Anda perbaiki?</label><textarea id="q18" class="w-full border p-2 rounded"></textarea>
+                    <label class="font-bold text-sm">19. Bagaimana Anda menilai diri sendiri di mata orang lain?</label><textarea id="q19" class="w-full border p-2 rounded"></textarea>
+                    <label class="font-bold text-sm">20. Apa yang membuat Anda merasa berharga?</label><textarea id="q20" class="w-full border p-2 rounded"></textarea>               
+<!-- Lanjutan Bank Pertanyaan (21-100) -->
+<label class="font-bold text-sm">21. Ceritakan silsilah keluarga inti Anda.</label><textarea id="q21" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">22. Bagaimana pola asuh ayah dan ibu Anda?</label><textarea id="q22" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">23. Apa nilai kehidupan yang paling ditekankan keluarga?</label><textarea id="q23" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">24. Siapa sosok yang paling berpengaruh dalam keluarga?</label><textarea id="q24" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">25. Bagaimana hubungan Anda dengan saudara kandung?</label><textarea id="q25" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">26. Apa aturan keluarga yang tidak boleh dilanggar?</label><textarea id="q26" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">27. Bagaimana keluarga menyelesaikan masalah/konflik?</label><textarea id="q27" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">28. Apa pekerjaan orang tua dan pandangan Anda tentang itu?</label><textarea id="q28" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">29. Bagaimana kondisi ekonomi keluarga Anda saat ini?</label><textarea id="q29" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">30. Apa pengalaman keluarga yang paling berkesan?</label><textarea id="q30" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">31. Apa tantangan tersulit yang pernah dihadapi keluarga?</label><textarea id="q31" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">32. Bagaimana cara keluarga mendukung cita-cita Anda?</label><textarea id="q32" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">33. Seberapa sering keluarga berkumpul?</label><textarea id="q33" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">34. Apakah Anda terbuka pada orang tua?</label><textarea id="q34" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">35. Bagaimana sosok ayah di mata Anda?</label><textarea id="q35" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">36. Bagaimana sosok ibu di mata Anda?</label><textarea id="q36" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">37. Apa pelajaran terbaik dari orang tua Anda?</label><textarea id="q37" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">38. Bagaimana cara Anda membalas jasa orang tua?</label><textarea id="q38" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">39. Apa harapan orang tua terhadap masa depan Anda?</label><textarea id="q39" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">40. Bagaimana jika pilihan hidup Anda berbeda dengan keluarga?</label><textarea id="q40" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">41. Bagaimana pengalaman masa SD Anda?</label><textarea id="q41" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">42. Apa prestasi akademik terbaik Anda?</label><textarea id="q42" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">43. Pernahkah Anda kesulitan dalam belajar?</label><textarea id="q43" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">44. Bagaimana cara Anda mengatur waktu belajar?</label><textarea id="q44" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">45. Apa mata pelajaran favorit Anda?</label><textarea id="q45" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">46. Siapa guru yang paling berjasa?</label><textarea id="q46" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">47. Apakah Anda pernah melanggar aturan sekolah?</label><textarea id="q47" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">48. Apa arti pendidikan bagi Anda?</label><textarea id="q48" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">49. Bagaimana hubungan Anda dengan teman sekelas?</label><textarea id="q49" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">50. Apakah Anda pernah menjadi ketua kelas?</label><textarea id="q50" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">51. Bagaimana cara Anda menghadapi ujian?</label><textarea id="q51" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">52. Apa rencana studi lanjut Anda?</label><textarea id="q52" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">53. Apakah Anda aktif di kegiatan ekstrakurikuler?</label><textarea id="q53" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">54. Apa pengalaman organisasi di sekolah yang berkesan?</label><textarea id="q54" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">55. Bagaimana cara Anda menyeimbangkan pendidikan dan hobi?</label><textarea id="q55" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">56. Sebutkan organisasi yang pernah Anda ikuti.</label><textarea id="q56" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">57. Apa jabatan tertinggi Anda?</label><textarea id="q57" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">58. Bagaimana cara Anda memimpin rapat?</label><textarea id="q58" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">59. Apa tugas utama Anda dalam organisasi?</label><textarea id="q59" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">60. Pernahkah Anda gagal menjalankan program kerja?</label><textarea id="q60" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">61. Bagaimana cara Anda memotivasi anggota?</label><textarea id="q61" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">62. Apa pencapaian terbesar dalam organisasi?</label><textarea id="q62" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">63. Bagaimana Anda menghadapi anggota yang pasif?</label><textarea id="q63" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">64. Apakah Anda lebih suka bekerja sendiri atau kelompok?</label><textarea id="q64" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">65. Apa arti loyalitas dalam organisasi?</label><textarea id="q65" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">66. Bagaimana cara Anda berkomunikasi dengan atasan?</label><textarea id="q66" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">67. Pernahkah Anda berkonflik dalam organisasi?</label><textarea id="q67" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">68. Apa yang Anda pelajari tentang kepemimpinan?</label><textarea id="q68" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">69. Bagaimana cara Anda mengelola anggaran organisasi?</label><textarea id="q69" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">70. Apa manfaat organisasi bagi karier Anda?</label><textarea id="q70" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">71. Apa definisi pemimpin menurut Anda?</label><textarea id="q71" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">72. Apa gaya kepemimpinan Anda?</label><textarea id="q72" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">73. Bagaimana cara Anda mengambil keputusan?</label><textarea id="q73" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">74. Apakah Anda siap menerima kritik?</label><textarea id="q74" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">75. Bagaimana jika bawahan Anda tidak patuh?</label><textarea id="q75" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">76. Apa tanggung jawab seorang pemimpin?</label><textarea id="q76" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">77. Bagaimana cara Anda mendelegasikan tugas?</label><textarea id="q77" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">78. Apakah Anda siap menjadi teladan?</label><textarea id="q78" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">79. Apa yang Anda lakukan jika tim gagal?</label><textarea id="q79" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">80. Bagaimana Anda menjaga kekompakan tim?</label><textarea id="q80" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">81. Apa konflik terberat yang pernah Anda alami?</label><textarea id="q81" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">82. Bagaimana cara Anda meredam emosi lawan bicara?</label><textarea id="q82" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">83. Apakah Anda pernah disalahkan atas kesalahan orang lain?</label><textarea id="q83" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">84. Bagaimana Anda menolak ajakan yang buruk?</label><textarea id="q84" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">85. Apa yang Anda lakukan jika dijauhi teman?</label><textarea id="q85" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">86. Bagaimana cara Anda meminta maaf?</label><textarea id="q86" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">87. Apa sikap Anda terhadap orang yang curang?</label><textarea id="q87" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">88. Bagaimana cara Anda menghadapi provokasi?</label><textarea id="q88" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">89. Pernahkah Anda merasa diremehkan?</label><textarea id="q89" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">90. Apa langkah Anda saat menghadapi jalan buntu?</label><textarea id="q90" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">91. Apa alasan kuat menjadi anggota Abdi Negara?</label><textarea id="q91" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">92. Apa yang Anda ketahui tentang tugas instansi ini?</label><textarea id="q92" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">93. Bagaimana jika Anda gagal tahun ini?</label><textarea id="q93" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">94. Apa target hidup 5 tahun ke depan?</label><textarea id="q94" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">95. Apa arti pengabdian bagi Anda?</label><textarea id="q95" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">96. Bagaimana Anda memandang seragam dinas?</label><textarea id="q96" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">97. Siapkah Anda ditempatkan di daerah terpencil?</label><textarea id="q97" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">98. Apa rencana Anda untuk menjaga integritas?</label><textarea id="q98" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">99. Apa pendapat Anda tentang korupsi dan radikalisme?</label><textarea id="q99" class="w-full border p-2 rounded"></textarea>
+<label class="font-bold text-sm">100. Mengapa Anda layak dipercaya memegang amanah sebagai abdi negara?</label><textarea id="q100" class="w-full border p-2 rounded"></textarea>
+</div>
+</div>
+
+<!-- P7: WORKBOOK REFLEKSI (14 Bagian Manual) -->
+            <div id="p7" class="page premium-card">
+                <h2 class="text-2xl font-bold mb-6">Workbook Refleksi Diri</h2>
+                <div class="space-y-4">
+                    <label class="block font-bold">1. Tentang Diri Saya</label><textarea id="wb1" class="w-full border p-2 rounded h-20"></textarea>
+                    <label class="block font-bold">2. Tentang Keluarga Saya</label><textarea id="wb2" class="w-full border p-2 rounded h-20"></textarea>
+                    <label class="block font-bold">3. Hobi Dan Aktivitas Positif</label><textarea id="wb3" class="w-full border p-2 rounded h-20"></textarea>
+                    <label class="block font-bold">4. Pengalaman Paling Membanggakan</label><textarea id="wb4" class="w-full border p-2 rounded h-20"></textarea>
+                    <label class="block font-bold">5. Pengalaman Paling Menantang</label><textarea id="wb5" class="w-full border p-2 rounded h-20"></textarea>
+                    <label class="block font-bold">6. Konflik Yang Pernah Dihadapi</label><textarea id="wb6" class="w-full border p-2 rounded h-20"></textarea>
+                    <label class="block font-bold">7. Cara Mengatasi Masalah</label><textarea id="wb7" class="w-full border p-2 rounded h-20"></textarea>
+                    <label class="block font-bold">8. Tiga Kelebihan Utama</label><textarea id="wb8" class="w-full border p-2 rounded h-20"></textarea>
+                    <label class="block font-bold">9. Tiga Area Pengembangan Diri</label><textarea id="wb9" class="w-full border p-2 rounded h-20"></textarea>
+                    <label class="block font-bold">10. Cara Mengembangkan Diri</label><textarea id="wb10" class="w-full border p-2 rounded h-20"></textarea>
+                    <label class="block font-bold">11. Target Hidup 5 Tahun</label><textarea id="wb11" class="w-full border p-2 rounded h-20"></textarea>
+                    <label class="block font-bold">12. Target Hidup 10 Tahun</label><textarea id="wb12" class="w-full border p-2 rounded h-20"></textarea>
+                    <label class="block font-bold">13. Motivasi Karier</label><textarea id="wb13" class="w-full border p-2 rounded h-20"></textarea>
+                    <label class="block font-bold">14. Nilai Hidup Yang Paling Penting</label><textarea id="wb14" class="w-full border p-2 rounded h-20"></textarea>
+                    <label class="block font-bold">
+15. Ceritakan perjalanan hidup Anda dari masa kecil hingga saat ini secara runtut.
+</label><textarea id="wb15" class="w-full border p-2 rounded h-20"></textarea>
+                    <label class="block font-bold">
+16. Ceritakan kegagalan terbesar yang pernah Anda alami, bagaimana Anda menghadapinya, dan pelajaran yang diperoleh.
+</label><textarea id="wb16" class="w-full border p-2 rounded h-20"></textarea>
+                    <label class="block font-bold">
+17. Dalam waktu sekitar 3 menit, perkenalkan diri Anda seolah sedang berada di hadapan pewawancara.
+</label><textarea id="wb17" class="w-full border p-2 rounded h-20"></textarea>
+                </div>
+            </div>
+
+            <!-- P8: DASHBOARD ANALISIS -->
+            <div id="p8" class="page premium-card">
+                <h2 class="text-2xl font-bold mb-6">Dashboard Analisis</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-4 border rounded">Kelengkapan Biodata: <span id="stat-bio">0%</span></div>
+                    <div class="p-4 border rounded">Kelengkapan Pendidikan: <span id="stat-pend">0%</span></div>
+                    <div class="p-4 border rounded">Kelengkapan Organisasi: <span id="stat-org">0%</span></div>
+                    <div class="p-4 border rounded">Kelengkapan Keluarga: <span id="stat-kel">0%</span></div>
+                </div>
+            </div>
+
+            <!-- P9: RINGKASAN & EXPORT PDF -->
+            <div id="p9" class="page premium-card text-center">
+                <h2 class="text-2xl font-bold mb-6">Ringkasan & Export PDF</h2>
+                <p class="mb-8">Laporan profil diri Anda telah siap untuk diunduh.</p>
+                <button type="button" onclick="exportPDF()" class="bg-amber-600 text-white px-10 py-4 rounded-lg font-bold">PREVIEW & EXPORT PDF</button>
+            </div>
+
+            <!-- NAVIGASI -->
+            <div class="flex justify-between mt-8">
+                <button type="button" onclick="navigate(-1)" class="bg-slate-300 px-6 py-2 rounded">Kembali</button>
+                <button type="button" onclick="navigate(1)" class="bg-slate-900 text-white px-6 py-2 rounded">Lanjut</button>
+            </div>
+        </form>
+    </main>
+
+    
+<script>
+const pages=['p0','p1','p2','p6','p7','p8','p9'];
+let cur=0;
+
+function navigate(step){
+    document.getElementById(pages[cur]).classList.remove('active');
+    cur=Math.max(0,Math.min(pages.length-1,cur+step));
+    document.getElementById(pages[cur]).classList.add('active');
+
+    const progress=Math.round((cur/(pages.length-1))*100);
+    document.getElementById('status-bar').innerText='Progress: '+progress+'%';
+    window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function escapeHtml(str){
+ return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+function nl2br(str){return escapeHtml(str).replace(/\n/g,'<br>');}
+
+function exportPDF(){
+ let report='<h1 style="text-align:center">LAPORAN HASIL SIMULASI</h1>';
+
+ report+='<h2>=== DATA DIRI ===</h2><table style="width:100%;border-collapse:collapse">';
+ document.querySelectorAll('#p2 input,#p2 textarea,#p2 select').forEach(f=>{
+   report+=`<tr><td style="border:1px solid #ddd;padding:6px;width:240px"><b>${escapeHtml(f.placeholder||f.id)}</b></td><td style="border:1px solid #ddd;padding:6px">${nl2br(f.value||'')}</td></tr>`;
+ });
+ report+='</table>';
+
+ report+='<div style="page-break-before:always"></div><h2>=== BANK PERTANYAAN ===</h2>';
+ for(let i=1;i<=100;i++){
+   const el=document.getElementById('q'+i);
+   if(!el) continue;
+   const lbl=el.previousElementSibling ? el.previousElementSibling.innerText : ('Pertanyaan '+i);
+   report+=`<div style="margin-bottom:15px"><div style="font-weight:bold">${escapeHtml(lbl)}</div><div style="border:1px solid #ccc;padding:10px">${nl2br(el.value)}</div></div>`;
+ }
+
+ report+='<div style="page-break-before:always"></div><h2>=== WORKBOOK REFLEKSI ===</h2>';
+ for(let i=1;i<=17;i++){
+   const el=document.getElementById('wb'+i);
+   if(!el) continue;
+   const lbl=el.previousElementSibling ? el.previousElementSibling.innerText : ('Workbook '+i);
+   report+=`<div style="margin-bottom:15px"><div style="font-weight:bold">${escapeHtml(lbl)}</div><div style="border:1px solid #ccc;padding:10px">${nl2br(el.value)}</div></div>`;
+ }
+
+ const w=window.open('','_blank');
+ w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Laporan</title></head><body style="font-family:Arial;padding:30px;line-height:1.6">${report}
+<script>
+function calcSection(ids){
+ let total=ids.length, filled=0;
+ ids.forEach(id=>{
+   const el=document.getElementById(id);
+   if(el && String(el.value||'').trim()!=='') filled++;
+ });
+ return total ? Math.round((filled/total)*100) : 0;
+}
+
+function updateDashboard(){
+ const bioIds=[...document.querySelectorAll('#p2 input,#p2 textarea,#p2 select')].map(el=>el.id);
+ const keluargaIds=[]; for(let i=21;i<=40;i++) keluargaIds.push('q'+i);
+ const pendidikanIds=[]; for(let i=41;i<=55;i++) pendidikanIds.push('q'+i);
+ const organisasiIds=[]; for(let i=56;i<=80;i++) organisasiIds.push('q'+i);
+
+ const bio=document.getElementById('stat-bio');
+ if(!bio) return;
+
+ bio.textContent=calcSection(bioIds)+'%';
+ document.getElementById('stat-kel').textContent=calcSection(keluargaIds)+'%';
+ document.getElementById('stat-pend').textContent=calcSection(pendidikanIds)+'%';
+ document.getElementById('stat-org').textContent=calcSection(organisasiIds)+'%';
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+ updateDashboard();
+ document.querySelectorAll('input,textarea,select').forEach(el=>{
+   el.addEventListener('input',updateDashboard);
+   el.addEventListener('change',updateDashboard);
+ });
+});
+</script>
+
+</body></html>`);
+ w.document.close();
+ setTimeout(()=>{w.focus();w.print();},700);
+}
+
+</script>
+
+<script>
+function calcSection(ids){
+ let total=ids.length, filled=0;
+ ids.forEach(id=>{
+   const el=document.getElementById(id);
+   if(el && String(el.value||'').trim()!=='') filled++;
+ });
+ return total ? Math.round((filled/total)*100) : 0;
+}
+
+function updateDashboard(){
+ const bioIds=[...document.querySelectorAll('#p2 input,#p2 textarea,#p2 select')].map(el=>el.id);
+ const keluargaIds=[]; for(let i=21;i<=40;i++) keluargaIds.push('q'+i);
+ const pendidikanIds=[]; for(let i=41;i<=55;i++) pendidikanIds.push('q'+i);
+ const organisasiIds=[]; for(let i=56;i<=80;i++) organisasiIds.push('q'+i);
+
+ const bio=document.getElementById('stat-bio');
+ if(!bio) return;
+
+ bio.textContent=calcSection(bioIds)+'%';
+ document.getElementById('stat-kel').textContent=calcSection(keluargaIds)+'%';
+ document.getElementById('stat-pend').textContent=calcSection(pendidikanIds)+'%';
+ document.getElementById('stat-org').textContent=calcSection(organisasiIds)+'%';
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+ updateDashboard();
+ document.querySelectorAll('input,textarea,select').forEach(el=>{
+   el.addEventListener('input',updateDashboard);
+   el.addEventListener('change',updateDashboard);
+ });
+});
+</script>
+
+</body>
+
+</html>
